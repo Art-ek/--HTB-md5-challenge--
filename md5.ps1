@@ -1,7 +1,9 @@
-$URL="http://docker.hackthebox.eu:31209"
+$URL="http://docker.hackthebox.eu:31914"
+
 $safari=([Microsoft.PowerShell.Commands.PSUserAgent]::Safari)
 
-$r=Invoke-WebRequest -uri $URL  -UserAgent $safari
+
+$r=Invoke-WebRequest -uri $URL  -UserAgent $agent  -SessionVariable session
 $pattern =  '(?i)<h3[^>]*>(.*)</h3>' 
 $result = [Regex]::Matches($r.Content, $pattern)
 #$result.groups.value[1]
@@ -10,22 +12,22 @@ $result = [Regex]::Matches($r.Content, $pattern)
 $md5 = New-Object -TypeName System.Security.Cryptography.MD5CryptoServiceProvider
 $utf8 = New-Object -TypeName System.Text.UTF8Encoding
 $hash = [System.BitConverter]::ToString($md5.ComputeHash($utf8.GetBytes($result.groups.value[1])))
-$MD5=$hash.Replace('-','')
-#$md5
-
+$MD5=$hash.Replace('-','').ToLower()
+$md5
 $input = @{
     
      'hash' = $md5
     
 
- } | ConvertTo-Json
+ } 
+ 
+ 
 
-#$json=$input | ConvertTo-Json
 
+$d=Invoke-WebRequest  -uri  $URL -UserAgent $safari -Method post -body $input -WebSession $session 
 
-$d=Invoke-WebRequest  -uri  $URL  -Method post -body $input  -UserAgent $safari
+$d.headers
 $d.Content
 
-#$d.Content
-#$dupa
+
 
