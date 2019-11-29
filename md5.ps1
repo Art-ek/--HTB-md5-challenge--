@@ -1,4 +1,4 @@
-$URL="http://docker.hackthebox.eu:31914"
+$URL="http://xxxx.xx.xxx:xxx"
 
 $safari=([Microsoft.PowerShell.Commands.PSUserAgent]::Safari)
 
